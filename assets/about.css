@@ -1,0 +1,102 @@
+@import 'https://fonts.googleapis.com/css?family=Alegreya+Sans';
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+*:focus{
+	outline: none;
+}
+
+/*over all styling of the html file*/
+html {
+  height: 100%;
+  box-sizing: border-box;
+}
+
+body{
+  margin: 0;
+  background-color: #cc1228;
+}
+
+ul{
+  list-style-type: none;
+  margin: auto;
+
+}
+
+p{
+	padding-top: 30%;
+}
+
+.title{
+  cursor: default;
+  position: relative;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding-top: 15%;
+  padding-bottom: 30%;
+  width: 500px;
+  height: 200px;
+  color: white;
+  font-size: 250%;
+  text-align: center;
+  font-family: 'Roboto', monospace;
+}
+
+.home{
+  position: absolute;;
+  margin: auto;
+  top: 0;
+  right: 89%;
+  bottom: 85%;
+  left: 0;
+  width: 100px;
+  height: 100px;
+}
+
+.home i{
+  font-size:175%;
+	color: white;
+}
+
+.home i:hover{
+  color: #4CAF50;
+}
+
+section{
+  margin: auto;
+  background-color: #ff334a;
+  min-height: 150vh;
+  width: 100%;
+  margin-top: 100px;
+}
+
+.p{
+	text-align: center;
+	vertical-align: middle;
+	font-family: 'Roboto', monospace;
+  background-color: #ff334a;
+  position: absolute;;
+  margin: auto;
+  font-size: 250%;
+  top: 250%;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 95%;
+  min-height: 110vh;
+  padding-left: 5%;
+
+}
+
+.logo{
+	position: absolute;;
+  margin: auto;
+  top: 355%;
+  bottom: 0;
+  right: 26%;
+  left: 0;
+  width: 14%;
+  height: 12%;
+}

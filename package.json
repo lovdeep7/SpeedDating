@@ -1,0 +1,27 @@
+{
+  "name": "SpeedDating",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "LS",
+  "license": "MIT",
+  "engines": {
+    "node": "11.x"
+  },
+  "dependencies": {
+    "chat-engine": "0.9.21",
+    "express": "^4.14.1",
+    "pubnub": "^4.21.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lovdeep7/SpeedDating.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lovdeep7/SpeedDating/issues"
+  },
+  "homepage": "https://github.com/lovdeep7/SpeedDating#readme",
+  "description": "Find your Valentine with PubNub's ChatEngine"
+}

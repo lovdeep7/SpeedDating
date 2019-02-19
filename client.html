@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    	<title>SpeedDating</title>
+    	<link type="text/css" rel="stylesheet" href="assets/client.css"/>
+      <link rel="icon" type="image/png" href="icon.png" sizes="65x65"/>
+      <script src="https://use.fontawesome.com/bb1de359ad.js"></script>
+    </head>
+
+    <script type="text/javascript" src="node_modules/chat-engine/dist/chat-engine.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+
+	var ChatEngineCore = window.ChatEngineCore;
+	ChatEngine = ChatEngineCore.create({
+    subscribeKey: 'subKey',
+    publishKey: 'pubKey'
+	});
+
+	var el = document.getElementById('server-time');
+		
+	ChatEngine.on('time', function (timeString) {
+		el.innerHTML = 'Server time: ' +timeString;
+	});
+	
+	var errorMsg;
+	var name;
+	var age;
+	var gender;
+	var state = 1;
+	var user;
+	var room;
+	var login = '<div id="error-container" ></div><div style="text-align:center"><ul style="list-style-type: none;" ><li><input id="name" type="text" name="name" value="" placeholder="Enter your Name!" ></li><li><input id="age" type="text" name="age" value="" placeholder="Enter your Age!" ></li><li><input id="gender" type="text" name="gender" value="" placeholder="Enter your Gender!" ></li></ul><button type="button" name="button" onclick="setUser()">Start chating!</button></div>'
+
+	var chatRoom;
+	ChatEngine.on('$.ready', (payload) => {
+		let me = payload.me;
+	chatRoom = new ChatEngine.Chat('room '+room);
+	})
+		
+	function setUser(){	// set username event listener
+		name = document.getElementById('name').value;
+		if(name.length < 5){
+			alert("Please enter a valid name!");
+			return;
+		}
+
+		age = document.getElementById('age').value;
+		gender = document.getElementById('gender').value;
+		let meUser = ChatEngine.connect('Me');
+		ChatEngine.on('$.ready', (payload) => {
+			let me = payload.me;
+			chatRoom = new ChatEngine.Chat('room '+room);
+        	chatRoom.emit('setUser', {name:name , age:age, gender:gender,room:0}); //send user name to server
+        })
+    };
+
+	function disconnect(data){
+		let chatRoom = new ChatEngine.Chat('room-'+data.room);
+		chatRoom.emit('leftRoom', data);
+	}
+
+    ChatEngine.on('userExists', function(data){// if server says user name exists
+		errorMsg = 'Error: ' + data;
+        document.getElementById('error-container').innerHTML = errorMsg;
+    });
+
+    ChatEngine.on('userSet', function(data){
+        name = data.name; /*set user to data.user name*/
+		room = data.room;
+		state = 2;
+        document.body.innerHTML = '<input type="text" id="message">\
+        <div id="send"><button id="buttonSend" type="button" name="button" onclick="sendMessage()">Send</button></div> <div id="disconnect"><button id="buttonDisconnect" type="button" name="disconnect" onclick="disconnect({name:name , age:age, gender:gender,room:room})">Disconnect</button></div>\
+        <div id="message-container"></div> <div class="logo"><a href="about.html"><img src="TheLemonLaw.png"/></a></div>';	// replace with input tag
+		document.getElementById('message-container').innerHTML += '<div> Your room is ' + room + '</div>';
+		sendJoinedMessage();
+    });
+
+    function sendMessage(){
+        var msg = document.getElementById('message').value;
+        if(msg){
+            chatRoom.emit('msg', {message: msg, name: name, room: room});
+        }
+		document.getElementById('message').value = '';
+    }
+
+	function sendJoinedMessage(){
+		var msg = 'joined';
+		chatRoom.emit('msg', {message: msg, name: name, room: room});
+	}
+
+    ChatEngine.on('newmsg', function(data){
+			document.getElementById('message-container').innerHTML += '<div><b>' + data.name + '</b>: ' + data.message + '</div>';
+			autoScroll();
+    });
+
+	ChatEngine.on('timer',function(data){
+		chatRoom.emit('timeout',data);	
+	});
+
+	ChatEngine.on('reset',function(){
+		reset();
+	});
+
+	function reset(){
+		window.location.reload();
+	}
+
+	function handleKeyPress(e){
+	var key= e.which;
+		if (key==13){
+			if (state == 1)
+				setUser();
+			else if(state == 2)
+				sendMessage();
+		}
+	}
+
+	function autoScroll(){
+		var ele = document.getElementById('message-container');
+		ele.scrollTop = ele.scrollHeight;
+	}
+        
+    </script>
+
+<body onkeypress="handleKeyPress(event)">
+
+  <div class="home">
+    <h2><a href="home.html"><i class="fa fa-home" ></i></a></h2>
+  </div>
+
+  <div class="logo">
+  		<a href="about.html"><img src="assets/SpeedDating.png"/></a>
+	</div>
+
+
+		<div class="username">
+    <label for="name">Username</label>
+		<input  class="usernameInput" id="name" type="text" name="name" value="" minlength="5" maxlength="14" placeholder="5 to 14 Characters" onfocus="this.placeholder=''" onblur="this.placeholder ='5 to 14 Characters'" >
+    </div>
+
+		<div class="age">
+    <label for="age">Age</label>
+    <input class="ageInput" id="age" type="text" name="age" value="" maxlength="3" placeholder="Age" onfocus="this.placeholder=''" onblur="this.placeholder ='Age'">
+    </div>
+
+    <div class="gender">
+    <label for="gender">Gender</label>
+    <input  class="usernameInput" id="gender" type="text" name="gender" value="" minlengh="4" maxlength="6" placeholder="Male or Female" onfocus="this.placeholder=''" onblur="this.placeholder ='Male or Female'" >
+    </div>
+
+    <div class="login">
+        <button  class="myButton" id="tv" type="button" name="button" onclick="setUser()">Log In</button>
+		</div>
+		<script type="text/javascript" src="/public/chat.js"></script>
+
+</body>
+</html>

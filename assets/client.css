@@ -1,0 +1,260 @@
+@import 'https://fonts.googleapis.com/css?family=Alegreya+Sans';
+@import url('https://fonts.googleapis.com/css?family=Roboto');
+
+*:focus{
+	outline: none;
+}
+
+body {
+	background-color: #cc1228;
+  margin: 0;
+}
+
+img{
+	width: 200px;
+	height: auto;
+}
+
+img:hover{
+	width: 250px;
+	height: auto;
+}
+
+ul{
+	list-style-type: none;
+}
+
+input{
+	font-size: 150%;
+	font-family: 'Roboto', monospace;
+	padding-left: 2%;
+	width: 300px;
+	height: 40px;
+	border: 3px solid #800000;
+  border-radius: 10px;
+}
+
+
+label{
+	font-size: 160%;
+	font-family: 'Roboto', monospace;
+}
+
+.home{
+  position: absolute;;
+  margin: auto;
+  top: 0;
+  right: 89%;
+  bottom: 85%;
+  left: 0;
+  width: 100px;
+  height: 100px;
+}
+
+.home i{
+  font-size:175%;
+	color: white;
+}
+
+.home i:hover{
+  color: #800000;
+}
+
+
+
+.logo{
+	position: absolute;;
+  margin: auto;
+  top: 80%;
+  bottom: 0;
+  right: 0;
+  left: 75%;
+  width: 14%;
+  height: 12%;
+}
+
+.logo:hover{
+	position: absolute;
+	margin: auto;
+  top: 78%;
+  bottom: 0;
+  right: 0;
+  left: 73%;
+
+
+}
+
+.username{
+	position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 61%;
+  right: 0;
+  left: 0;
+  width: 300px;
+  height: 50px;
+
+}
+
+.age{
+	position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 36%;
+  right: 0;
+  left: 0;
+  width: 300px;
+  height: 50px;
+
+}
+
+.gender{
+	position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 11%;
+  right: 0;
+  left: 0;
+  width: 300px;
+  height: 50px;
+
+}
+
+.myButton{
+	cursor: pointer;
+	background-color: white;
+	font-size: 120%;
+	font-family: 'Roboto', monospace;
+	width: 100%;
+	height: 100%;
+	border: 3px solid #800000;
+	border-radius: 10px;
+	-webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+
+.myButton:hover{
+  background-color: #800000;
+  color: white;
+  border: 4px solid white;
+}
+
+.myButton:active{
+  background-color: #800000;
+  color: white;
+  border: 4px solid #800000;
+}
+
+.login{
+	position: absolute;
+  margin: auto;
+  top: 20%;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  width: 165px;
+  height: 45px;
+}
+
+/*next page after logging in*/
+
+#message-container{
+	border: 5px solid #800000;
+	border-radius: 10px;
+	background-color: white;
+	position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 23%;
+  right: 0;
+  left: 0;
+  width: 550px;
+  height: 400px;
+	overflow-y: scroll;
+	font-family: 'Roboto', monospace;
+	font-size: 130%;
+	padding-top: 0.2%;
+	padding-left: 0.5%;
+}
+
+#message{
+	border: 5px solid #800000;
+	border-radius: 10px;
+	background-color: white;
+	position: absolute;
+  margin: auto;
+  top: 53%;
+  bottom: 0;
+  right: 12.5%;
+  left: 0;
+  width: 350px;
+  height: 100px;
+}
+
+#send{
+	position: absolute;
+  margin: auto;
+  top: 45%;
+  bottom: 0;
+  right: 0;
+  left: 28%;
+  width: 165px;
+  height: 45px;
+}
+
+#disconnect{
+	position: absolute;
+	margin: auto;
+	top: 61.5%;
+	bottom: 0;
+	right: 0;
+	left: 28%;
+	width: 165px;
+	height: 45px;
+}
+
+#buttonSend{
+	cursor: pointer;
+	font-size: 120%;
+	font-family: 'Roboto', monospace;
+	border: 5px solid #800000;
+	border-radius: 10px;
+	background-color: #800000;
+	color: white;
+	width: 100%;
+	height: 100%;
+	-webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+
+#buttonSend:hover{
+	border: 5px solid white;
+	border-radius: 10px;
+	background-color: white;
+	color: #800000;
+	width: 100%;
+	height: 100%;
+}
+
+#buttonDisconnect{
+	cursor: pointer;
+	font-size: 120%;
+	font-family: 'Roboto', monospace;
+	border: 5px solid #800000;
+	border-radius: 10px;
+	background-color: #800000;
+	color: white;
+	width: 100%;
+	height: 100%;
+	-webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+}
+
+#buttonDisconnect:hover{
+		border: 5px solid white;
+		border-radius: 10px;
+		background-color: white;
+		color: #800000;
+		width: 100%;
+		height: 100%;
+}

@@ -1,0 +1,37 @@
+#message-container{
+	background-color: white;
+}
+
+#message {
+	width: 550px;
+	height: 80px;
+	display: block;
+	float:left;
+	margin: 0 auto;
+	background-color: #f9f9f9;
+	border: 1px solid #cccccc;
+	border-radius: 2px;
+	padding-left: 20px;
+	padding-top: 20px;
+	resize: none;
+	font:inherit;
+	color:inherit;
+}
+
+#sendButton{
+	width: 110px;
+	height: 60px;
+	float:bottom-right;
+	text-align:center;
+	background-color: #73b4d4;
+	display: block;
+	margin: 0 auto;
+	border: none;
+	box-shadow: 3px 3px 3px #efedee;
+	border-radius: 2px;
+	color:white;
+	font-weight: bold;
+	font-size: 17px;
+	outline: none;
+	cursor:pointer;
+}

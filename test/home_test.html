@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Testing Client</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>	
+	<style>
+	*{
+		padding: 0;
+		margin: 0;
+		-webkit-box-sizing: border-box;
+		-moz-box-sizing: border-box;
+		box-sizing: border-box;
+	}
+	body{
+		font-family: Verdana;
+	}
+	ul{
+		list-style-type: none;
+		padding: 20px;
+		background: #000;
+		color: #fff;
+	}
+	#controls{
+		position: absolute;
+		bottom: 0px;
+		left: 0px;
+		border-top : 2px #333 solid;
+		display: block;
+		width: 100%;
+	}
+	#controls #msj{
+		display: block;
+		padding: 20px;
+		float: left;
+		width: 80%;
+		font-size: 18pt;
+	}
+	#controls #btn{
+		float: right;
+		padding: 20px;
+	}
+	#controls #channel{
+		display: block;
+		width: 100%;
+		font-size:24pt;
+	}
+	</style>
+</head>
+<body>
+	<script type="text/javascript">
+		var socket = io();
+		$(function(){
+			$("form").submit(function(){
+				var mensaje = $("#msj").val();
+				if(mensaje=='') return false;
+				//evento message en el server nodejs
+				console.log(mensaje)
+				socket.emit('message',mensaje);
+				$("#msj").val('').focus();
+				return false;
+			});
+			$("#channel").change(function(){
+				socket.emit('change channel',$("#channel").val());
+			});
+		});
+		
+		socket.on('message',function(msg,id){
+			$("#message").append($('<li>').text(id+' : ' +msg));
+		});
+		socket.on('change channel',function(channel){
+			$("#message").html('').append($('<li>').text('Welcome to Channel:  '+channel+' !'));	
+		});
+	</script>
+	<ul id="message">
+		
+	</ul>
+	<div id="controls">
+		<form action="">			
+			<select name="channel" id="channel">
+				<option value="channel-a">Channel A</option>
+				<option value="channel-b">Channel B</option>
+			</select>
+			<input type="text" id="msj" placeholder="Message">
+			<input type="submit" id="btn" value="Submit">
+		</form>
+	</div>
+</body>
+</html>

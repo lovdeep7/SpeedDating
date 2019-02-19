@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+
+<head>
+<meta charset="utf-8">
+<meta name="viewpoint" content="width=device-width, initial-scale=1">
+<title>Speed Dating</title>
+<link rel="stylesheet" type="text/css" href="assets/home.css"/>
+<link rel="icon" type="image/png" href="assets/Icon.png" sizes="65x65"/>
+<script>
+function visitAbout(){
+        window.location='about.html';
+    }
+function visitContact(){
+        window.location='contact.html';
+    }
+</script>
+
+</head>
+
+<body>
+
+<div class="logo">
+  <img src="assets/SpeedDating.png"/>
+</div>
+
+<section class="body">
+  <div class="start-button">
+  <a href="/create">
+    <button id="start-button-style" type="button" onclick="Hello">Start Chatting</button>
+  </a>
+  </div>
+</section>
+
+<footer>
+  <ul class="bottom-banner">
+    <li><button id="about" onclick="visitAbout();">About</button></li>
+    <li><button id="contact" onclick="visitContact();">Contact</button></li>
+  </ul>
+</footer>
+
+</body>
+
+</html>
