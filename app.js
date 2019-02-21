@@ -2,22 +2,14 @@ var express = require('express');
 
 var app = express();
 var http = require('http').Server(app);
-var io = require('socket.io')(http);
-var PORT = process.env.PORT || 8080;
-var PubNub = require('pubnub');
 var ChatEngineCore = require('chat-engine');
 
-pubnub = new PubNub({
-    publishKey : 'pub-c-aa2fae1a-62d7-4876-a246-0bc97371ebb7',
-    subscribeKey : 'sub-c-9661615a-281b-11e9-9ee5-ae9cce607226'
-})
-
 ChatEngine = ChatEngineCore.create({
-    subscribeKey: 'pub-c-aa2fae1a-62d7-4876-a246-0bc97371ebb7',
-    publishKey: 'sub-c-9661615a-281b-11e9-9ee5-ae9cce607226'
+    subscribeKey: 'subKey',
+    publishKey: 'pubKey'
 });
 
-let meUser = ChatEngine.connect('Me');
+var PORT = process.env.PORT || 8080;
 
 users = [];
 client = [];
@@ -28,120 +20,122 @@ app.use(express.static(__dirname));
 
 
 app.get('/',function(req,res){
-	res.sendFile(__dirname + '/home.html');
+	res.sendFile(__dirname + '/main_page.html');
 });
 
 app.get('/create', function(req,res){
 	res.redirect('/client.html');
 });
 
-io.on('connection', function(socket){
 
-	socket.on('disconnect',function(){
-		
-	});
-	socket.on('setUser', function(data){
-		if(users.indexOf(data.name) > -1){	// name user cannot be found
-			socket.emit('userExists', data.name + ' username is taken! Try some other username.');
+// ChatEngine implementation
+
+let meUser = ChatEngine.connect('Me');
+
+ChatEngine.on('$.ready', (payload) => {
+	let me = payload.me;
+		chat.on('$.offline.*', (payload) => {
+		console.log('User left the room:', payload.user);
+	})
+	if(users.indexOf(payload.user) > -1) {
+		chat.emit('userExists', payload.name + ' username is taken! Try some other username.');
+	}
+	else {
+		// choose based on age
+		if (payload.age < 18) {
+			if(payload.gender == "Male") {
+				roomNum = Math.floor((Math.random() * 3) +1);
+			}
+			else {
+				roomNum = 2;
+			}
 		}
-		else{
-			// age-based selection
-			if  (data.age < 18 ){
-				if(data.gender == "Male") {
-					roomNum = Math.floor((Math.random() * 3)+1);
+		else {
+			if (payload.gender == "Male") {
+				roomNum - Math.floor((Math.random() *10) + 4);
+			}
+			else if (payload.gender == "Female") {
+				roomNum = Math.floor((Math.random() *5)+1)*2;
+			}
+		}
+		while (ChatEngine.chats["room-"+roomNum] && ChatEngine.chats["room-"+roomNum].length == 2){
+			if  (payload.age < 18 ){
+				if(payload.gender == "Male") {
+					roomNum = Math.floor((Math.random() * 2))+1;
 				}
 				else{
 					roomNum = 2;
 				}
 			}
 			else {
-				if (data.gender == "Male"){
+				if (payload.gender == "Male"){
 					roomNum = Math.floor((Math.random() * 10) + 4);
 				}
-				else if(data.gender == "Female"){
+				else if(payload.gender == "Female"){
 					roomNum = Math.floor((Math.random() * 5)+2)*2;
 				}
 			}
-			while (io.nsps['/'].adapter.rooms["room-"+roomNum] && io.nsps['/'].adapter.rooms["room-"+roomNum].length == 2){
-				if  (data.age < 18 ){
-					if(data.gender == "Male") {
-						roomNum = Math.floor((Math.random() * 2))+1;
-					}
-					else{
-						roomNum = 2;
-					}
-				}
-				else {
-					if (data.gender == "Male"){
-						roomNum = Math.floor((Math.random() * 10) + 4);
-					}
-					else if(data.gender == "Female"){
-						roomNum = Math.floor((Math.random() * 5)+2)*2;
-					}
-				}
-			}
-			data.room = roomNum; 
-			socket.join("room-"+roomNum);
-			users.push(data);	// push to Array
-			client.push(socket);
-			
-			socket.emit('userSet', users[users.length-1]);	// send message to room
-			
-			if (io.nsps['/'].adapter.rooms["room-"+roomNum].length == 2 ){
-				console.log("Timer started");
-				for (var i in client){
-					if (users[i].room == roomNum){
-						client[i].emit('timer' , users[i] );
-						
-					}
-				}
-
-			}
-			
-			
 		}
-	});
-	socket.on('msg', function(data){
+		payload.room = roomNum; 
+		let chatRoom = new ChatEngine.Chat("room-"+roomNum);
+		chatRoom.connect();
+		users.push(payload);	// push to Array
+		client.push(chatRoom);
+		
+		chatRoom.emit('userSet', users[users.length-1]);
+			
+		if (ChatEngine.chats["room-"+roomNum].length == 2 ){
+			console.log("Timer started");
+			for (var i in client){
+				if (users[i].room == roomNum){
+					console.log(users[i]);
+					client[i].emit('timer', users[i] );
+						
+				}
+			}
+
+		}
+	}
+	chatRoom.on('msg', function(data){ // %.join
       //Send message to everyone in room
-      io.sockets.in("room-"+data.room).emit('newmsg', data);
+      chatRoom.emit('newmsg', data);
+	  console.log(users);
 	});
 	
-	socket.on('leftRoom',function(data){
-		
+	chatRoom.on('$.offline.leave',function(data){
 		var index;
 		for (var i in client){
 			if (users[i].room == data.room){
 				clearTimeout(client[i].timer);
-				
 			}
 		}
-		
-		io.sockets.in("room-"+data.room).emit('newmsg', {message: " disconnected" , name : data.name});
+		chatRoom.emit('newmsg', {message: " disconnected", name: data.name});
 		
 		// delete user
 		index = users.indexOf(data.name);
 		users.splice(index,1);
 		client.splice(index,1);
-		socket.emit('reset','');
-		socket.leave("room-"+data.room);
+		chatRoom.emit('reset','');
+		chatRoom.leave();
 		
 
 
 	});
-	socket.on('timeout',function(data){
+	chatRoom.on('timeout', function(data){
 		var index;
-		// delete user after timer ended
 		timer = setTimeout(function(){
 			index = users.indexOf(data.name);
 			users.splice(index,1);
 			client.splice(index,1);
-			socket.emit('reset','');
-			socket.leave("room-"+data.room);
+			chatRoom.emit('reset','');
+			chatRoom.leave();
 		},7000)	// wait 7 seconds
 	});
+})
 
-});
+
 
 http.listen(PORT,function(){
 	console.log('Listening on port: ',PORT);
 });
+
